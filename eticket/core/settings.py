@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',  # Custom user app
     'lookups',
+    'tickets',
 ]
 
 MIDDLEWARE = [
