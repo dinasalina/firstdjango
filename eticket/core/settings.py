@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'accounts',  # Custom user app
     'lookups',
     'tickets',
+    'allauth',  # new
+    'allauth.account',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -50,7 +53,21 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware" # new
 ]
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+SITE_ID = 1
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+
+LOGIN_REDIRECT_URL = "/"
+
+
 
 ROOT_URLCONF = 'core.urls'
 
@@ -124,4 +141,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "accounts.CustomUser"  # new
+AUTH_USER_MODEL = "accounts.CustomUser"  # kena letak kat bawah sekali
