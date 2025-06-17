@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Create Ticket</h1>
+
+<form action="{% url 'create_ticket' %}" method="post">
+
+    {% csrf_token %}
+    
+    <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    <input type="text" class="form-control" name="title" id="title" placeholder="Enter ticket title">
+    <div class="form-text">Contoh: Masalah capaian internet.</div>
+</div>
+
+<div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea class="form-control" name="description" id="description" rows="4" placeholder="Explain the issue in detail..."></textarea>
+    <div class="form-text">Berikan penerangan lengkap tentang masalah yang dihadapi.</div>
+</div>
+
+<div>
+    <button type="submit" class="btn btn-primary">Create Ticket</button>
+</div>
+
+
+
+</form>
+
+
+{% endblock %}
