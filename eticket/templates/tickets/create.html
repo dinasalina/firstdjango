@@ -7,18 +7,73 @@
 <form action="{% url 'create_ticket' %}" method="post">
 
     {% csrf_token %}
-    
-    <div class="mb-3">
-    <label for="title" class="form-label">Title</label>
-    <input type="text" class="form-control" name="title" id="title" placeholder="Enter ticket title">
-    <div class="form-text">Contoh: Masalah capaian internet.</div>
-</div>
-
+ 
+    <!-- title -->
+<!-- title -->
 <div class="mb-3">
-    <label for="description" class="form-label">Description</label>
-    <textarea class="form-control" name="description" id="description" rows="4" placeholder="Explain the issue in detail..."></textarea>
-    <div class="form-text">Berikan penerangan lengkap tentang masalah yang dihadapi.</div>
+    <label for="id_title" class="form-label">Title</label>
+    <input type="text" class="form-control" name="title" id="id_title"
+           value="{{ form.title.value|default_if_none:'' }}" placeholder="Enter ticket title">
+    <div class="form-text">Contoh: Masalah capaian internet.</div>
+
+    {% if form.title.errors %}
+        <div class="text-danger">{{ form.title.errors.0 }}</div>
+    {% endif %}
 </div>
+<!-- end title -->
+
+<!-- description -->
+<div class="mb-3">
+    <label for="id_description" class="form-label">Description</label>
+    <textarea class="form-control" name="description" id="id_description" rows="4"
+              placeholder="Explain the issue in detail...">{{ form.description.value|default_if_none:'' }}</textarea>
+    <div class="form-text">Berikan penerangan lengkap tentang masalah yang dihadapi.</div>
+
+    {% if form.description.errors %}
+        <div class="text-danger">{{ form.description.errors.0 }}</div>
+    {% endif %}
+</div>
+<!-- end description -->
+
+<!-- category -->
+<div class="mb-3">
+    <label for="id_category" class="form-label">Category</label>
+    <select name="category" id="id_category" class="form-select">
+        <option value="">Select Category</option>
+        {% for category in categories %}
+            <option value="{{ category.id }}"
+                {% if form.category.value|stringformat:"s" == category.id|stringformat:"s" %}selected{% endif %}>
+                {{ category.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    {% if form.category.errors %}
+        <div class="text-danger">{{ form.category.errors.0 }}</div>
+    {% endif %}
+</div>
+<!-- end category -->
+
+<!-- department -->
+<div class="mb-3">
+    <label for="id_department" class="form-label">Department</label>
+    <select name="department" id="id_department" class="form-select">
+        <option value="">Select Department</option>
+        {% for department in departments %}
+            <option value="{{ department.id }}"
+                {% if form.department.value|stringformat:"s" == department.id|stringformat:"s" %}selected{% endif %}>
+                {{ department.name }}
+            </option>
+        {% endfor %}
+    </select>
+
+    {% if form.department.errors %}
+        <div class="text-danger">{{ form.department.errors.0 }}</div>
+    {% endif %}
+</div>
+<!-- end department -->
+
+
 
 <div>
     <button type="submit" class="btn btn-primary">Create Ticket</button>

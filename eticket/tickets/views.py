@@ -1,28 +1,58 @@
 from django.shortcuts import render
 from .models import Tickets
+from lookups.models import Department, Category
+from .forms import CreateTicketForm
 
-# Create your views here.
 def home(request):
     return render(request, "home.html")
 
 def create(request):
+    form = CreateTicketForm()  # ← pastikan form wujud untuk GET dan fallback
 
     if request.method == "POST":
-        # bila sumbit form
         print("Form submitted")
-        print("From data", request.POST)
+        print("Form data", request.POST)
 
-        # get data from request
-        title = request.POST.get('title', '')
-        description = request.POST.get('description', '')
+        form = CreateTicketForm(request.POST)  # ← inisialisasi form dengan data POST
 
-        user = request.user
-        
-        # try crete ticket
-        Tickets.objects.create(title=title, description=description, user=user)
+        if form.is_valid():
+            pass
 
-    else:
-        # bila load form
-        pass
+            # Ambil data dari borang
+            title = request.POST.get("title", "")
+            description = request.POST.get("description", "")
+            category_id = request.POST.get("category_id", "")
+            department_id = request.POST.get("department_id", "")
 
-    return render(request, "tickets/create.html")
+            user = request.user
+
+            # Semak jika semua maklumat diisi
+            if title and category_id and department_id:
+                try:
+                    department = Department.objects.get(id=int(department_id))
+                    category = Category.objects.get(id=int(category_id))
+
+                    Tickets.objects.create(
+                        title=title,
+                        description=description,
+                        user=user,
+                        department=department,
+                        category=category,
+                    )
+                    print("Tiket berjaya dihantar.")
+
+                except Exception as e:
+                    print("Ralat semasa cipta tiket:", e)
+        else:
+            print("Sila lengkapkan semua maklumat yang diperlukan.")
+
+    departments = Department.objects.all()
+    categories = Category.objects.all()
+
+    context = {
+        "departments": departments,
+        "categories": categories,
+        "form": form,
+    }
+
+    return render(request, "tickets/create.html", context)
