@@ -6,6 +6,16 @@ from .forms import CreateTicketForm
 def home(request):
     return render(request, "home.html")
 
+def index(request):
+
+    tickets = Tickets.objects.filter(user=request.user).order_by("-created_at")  # ← pastikan ada model Tickets dan filter mengikut pengguna
+   # breakpoint() 
+    context = {
+        "tickets": tickets,
+    }
+    return render(request, "tickets/index.html", context)  # ← pastikan ada template untuk index
+    pass  # ← pastikan ada fungsi index walaupun kosong
+
 def create(request):
     form = CreateTicketForm()  # ← pastikan form wujud untuk GET dan fallback
 
